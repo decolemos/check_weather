@@ -1,10 +1,24 @@
-import 'package:check_temperature/provider/weather_provider.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:check_temperature/screens/home/components/form_selected_name.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ShowTemperature extends StatelessWidget {
-  const ShowTemperature({super.key});
+import 'package:check_temperature/provider/weather_provider.dart';
 
+class ShowTemperature extends StatefulWidget {
+
+  final String newName;
+
+  const ShowTemperature({
+    Key? key,
+    required this.newName,
+  }) : super(key: key);
+
+  @override
+  State<ShowTemperature> createState() => _ShowTemperatureState();
+}
+
+class _ShowTemperatureState extends State<ShowTemperature> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<WeatherProvider>(context);
@@ -17,10 +31,15 @@ class ShowTemperature extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Text("Jaragua do Sul, SC"),
+                  Text(widget.newName),
                   IconButton(
                     onPressed: () {
-                      
+                      showDialog(
+                        context: context, 
+                        builder: (context) {
+                          return const FormSelectedName();
+                        },
+                      );
                     }, 
                     icon: const Icon(Icons.edit, color: Colors.white)
                   )
@@ -28,7 +47,7 @@ class ShowTemperature extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  provider.getTemperature();
+                  provider.getWeatherData(widget.newName);
                 }, 
                 icon: const Icon(Icons.refresh, color: Colors.white)
               )

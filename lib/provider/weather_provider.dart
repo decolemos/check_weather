@@ -6,10 +6,10 @@ import 'package:http/http.dart' as http;
 
 class WeatherProvider extends ChangeNotifier {
 
-  final String url = "http://api.weatherapi.com/v1/current.json?key=21d97d68e4844364bf4225107230409&q=jaragua do sul&aqi=no";
+  final String url = "http://api.weatherapi.com/v1/current.json?key=21d97d68e4844364bf4225107230409&q=";
 
-  Future<WeatherData> getTemperature() async {
-    final response = await http.get(Uri.parse(url));
+  Future<WeatherData> getWeatherData(String newName) async {
+    final response = await http.get(Uri.parse("$url$newName&aqi=no"));
 
     log(response.statusCode.toString());
     log(response.body);

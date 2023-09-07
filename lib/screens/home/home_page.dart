@@ -1,8 +1,19 @@
 import 'package:check_temperature/screens/home/components/show_temperature.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  _setNewName() {
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +28,9 @@ class HomePage extends StatelessWidget {
       body: const Center(
         child: Column(
           children: [
-            ShowTemperature()
+            ShowTemperature(
+              newName: "Testando",
+            )
           ],
         ),
       ),
