@@ -1,10 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:check_temperature/provider/weather_provider.dart';
-import 'package:check_temperature/screens/home/components/show_temperature.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FormSelectedName extends StatefulWidget {
-  const FormSelectedName({super.key});
+
+
+  const FormSelectedName({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<FormSelectedName> createState() => _FormSelectedNameState();
@@ -13,18 +17,17 @@ class FormSelectedName extends StatefulWidget {
 class _FormSelectedNameState extends State<FormSelectedName> {
 
   final _formKey = GlobalKey<FormState>();
-  late String newName;
+  late String name;
 
-  Future<void> _changeNameRegion() async {
-    if(!_formKey.currentState!.validate()) return;
+  void _changeNameRegion() {
+  if (_formKey.currentState!.validate()) {
     _formKey.currentState!.save();
 
-    final weatherData = await Provider.of<WeatherProvider>(context, listen: false).getWeatherData(newName);
+    Provider.of<WeatherProvider>(context, listen: false).getWeatherData(name);
 
-    // ignore: use_build_context_synchronously
     Navigator.pop(context);
-
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,7 @@ class _FormSelectedNameState extends State<FormSelectedName> {
       content: Form(
         key: _formKey,
         child: TextFormField(
+          initialValue: "Jaragua do sul",
           decoration: const InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -55,7 +59,7 @@ class _FormSelectedNameState extends State<FormSelectedName> {
             return null;
           },
           onSaved: (newValue) {
-            newName = newValue!;
+            name = newValue!;
           },
         ),
       ),

@@ -6,17 +6,19 @@ import 'package:http/http.dart' as http;
 
 class WeatherProvider extends ChangeNotifier {
 
+  WeatherData? weatherData;
+
   final String url = "http://api.weatherapi.com/v1/current.json?key=21d97d68e4844364bf4225107230409&q=";
 
-  Future<WeatherData> getWeatherData(String newName) async {
-    final response = await http.get(Uri.parse("$url$newName&aqi=no"));
+  Future<void> getWeatherData(String name) async {
+    final response = await http.get(Uri.parse("$url$name&aqi=no"));
 
     log(response.statusCode.toString());
     log(response.body);
 
     if(response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
-      final weatherData = WeatherData(
+      weatherData = WeatherData(
         name: jsonResponse["location"]["name"], 
         region: jsonResponse["location"]["region"], 
         country: jsonResponse["location"]["country"], 
@@ -31,7 +33,8 @@ class WeatherProvider extends ChangeNotifier {
         humidity: jsonResponse["current"]["humidity"], 
         uv: jsonResponse["current"]["uv"]
       );
-      return weatherData;
+
+      notifyListeners();
     } else {
       throw Exception("Erro ao buscar clima: ${response.statusCode}");
     }

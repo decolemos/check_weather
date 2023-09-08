@@ -1,17 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:check_temperature/screens/home/components/form_selected_name.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:check_temperature/provider/weather_provider.dart';
+import 'package:check_temperature/screens/home/components/form_selected_name.dart';
 
 class ShowTemperature extends StatefulWidget {
 
-  final String newName;
-
   const ShowTemperature({
     Key? key,
-    required this.newName,
   }) : super(key: key);
 
   @override
@@ -19,6 +15,8 @@ class ShowTemperature extends StatefulWidget {
 }
 
 class _ShowTemperatureState extends State<ShowTemperature> {
+
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<WeatherProvider>(context);
@@ -31,7 +29,11 @@ class _ShowTemperatureState extends State<ShowTemperature> {
             children: [
               Row(
                 children: [
-                  Text(widget.newName),
+                  provider.weatherData == null
+                  ? const Center(
+                    child: Text("Nenhuma região selecionada!"),
+                  )
+                  : Text("${provider.weatherData!.name} - ${provider.weatherData!.region}"),
                   IconButton(
                     onPressed: () {
                       showDialog(
@@ -47,7 +49,7 @@ class _ShowTemperatureState extends State<ShowTemperature> {
               ),
               IconButton(
                 onPressed: () {
-                  provider.getWeatherData(widget.newName);
+                  provider.getWeatherData(provider.weatherData!.name);
                 }, 
                 icon: const Icon(Icons.refresh, color: Colors.white)
               )
@@ -59,13 +61,19 @@ class _ShowTemperatureState extends State<ShowTemperature> {
           Center(
             child: Column(
               children: [
-                const Text("30.0\u2103",
+                provider.weatherData == null
+                ? const Text("- -",
                   style: TextStyle(fontSize: 50),
+                )
+                : Text("${provider.weatherData!.tempC}",
+                  style: const TextStyle(fontSize: 50),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                const Text("Chuva fraca com trovões", style: TextStyle(
+                provider.weatherData == null
+                ? const Text("Sem informação")
+                : Text(provider.weatherData!.condition, style: const TextStyle(
                     fontSize: 12
                   ),
                 ),
