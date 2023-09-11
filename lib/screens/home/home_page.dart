@@ -16,15 +16,18 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: const Color(0xff1D3E50),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        title: const Text("Verificar temperatura"),
+        elevation: 1.0,
+        title: const Text("Verificar Clima"),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Column(
-          children: [
-            ShowTemperature()
-          ],
+      body: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            children: [
+              ShowTemperature()
+            ],
+          ),
         ),
       ),
     );

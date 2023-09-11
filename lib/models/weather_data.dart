@@ -10,8 +10,8 @@ class WeatherData {
   int    isDay;
   String condition;
   String iconCondition;
-  double windDegree;
-  double humidity;
+  int windDegree;
+  int humidity;
   double uv;
 
   WeatherData({

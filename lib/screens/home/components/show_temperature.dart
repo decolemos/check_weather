@@ -33,7 +33,25 @@ class _ShowTemperatureState extends State<ShowTemperature> {
                   ? const Center(
                     child: Text("Nenhuma região selecionada!"),
                   )
-                  : Text("${provider.weatherData!.name} - ${provider.weatherData!.region}"),
+                  : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${provider.weatherData!.name} - ${provider.weatherData!.region}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(provider.weatherData!.localTime,
+                        style: const TextStyle(
+                          fontSize: 12
+                        ),
+                      )
+                    ],
+                  ),
                   IconButton(
                     onPressed: () {
                       showDialog(
@@ -49,7 +67,19 @@ class _ShowTemperatureState extends State<ShowTemperature> {
               ),
               IconButton(
                 onPressed: () {
-                  provider.getWeatherData(provider.weatherData!.name);
+                  if(provider.weatherData == null){
+                    final snackBar = SnackBar(
+                      content: const Text("Sem região selecionada"),
+                      action: SnackBarAction(
+                        label: "Cancelar", 
+                        onPressed: () {
+                          
+                        },),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    provider.getWeatherData(provider.weatherData!.name);
+                  }
                 }, 
                 icon: const Icon(Icons.refresh, color: Colors.white)
               )
@@ -62,34 +92,68 @@ class _ShowTemperatureState extends State<ShowTemperature> {
             child: Column(
               children: [
                 provider.weatherData == null
+                ? const Text("Sem informação")
+                : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: Image.network(provider.weatherData!.iconCondition,
+                        fit: BoxFit.fill,
+                      )
+                    ),
+                    Text(provider.weatherData!.condition)
+                  ],
+                ),
+                provider.weatherData == null
                 ? const Text("- -",
                   style: TextStyle(fontSize: 50),
                 )
-                : Text("${provider.weatherData!.tempC}",
+                : Text("${provider.weatherData!.tempC}\u2103",
                   style: const TextStyle(fontSize: 50),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                provider.weatherData == null
-                ? const Text("Sem informação")
-                : Text(provider.weatherData!.condition, style: const TextStyle(
-                    fontSize: 12
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset("assets/tempestade.png"),
-                    const Text("Tempestade")
+                    provider.weatherData == null
+                    ? const Text("Umidade: -  -",
+                        style: TextStyle(
+                          fontSize: 20
+                        ),
+                      )
+                    : Text("Umidade: ${provider.weatherData!.humidity} %",
+                      style: const TextStyle(
+                        fontSize: 20
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    provider.weatherData == null
+                    ? const Text("Vento: -  -",
+                        style: TextStyle(
+                          fontSize: 20
+                        ),
+                      )
+                    : Text("Vento: ${provider.weatherData!.windDegree} mph",
+                      style: const TextStyle(
+                        fontSize: 20
+                      ),
+                    )
                   ],
-                ),
+                )
               ],
             ),
           ),
+          const SizedBox(
+            height: 40,
+          ),
+          const Divider(
+            color: Colors.white,
+          )
         ],
       ),
     );
